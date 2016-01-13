@@ -54,14 +54,15 @@ final class Utils {
     return ResponseBody.create(body.contentType(), body.contentLength(), buffer);
   }
 
-  static <T> void validateServiceInterface(Class<T> service) {
+  static <T> void validateServiceInterface(Class<T> service, boolean allowExtendInerface) {
     if (!service.isInterface()) {
       throw new IllegalArgumentException("API declarations must be interfaces.");
     }
     // Prevent API interfaces from extending other interfaces. This not only avoids a bug in
     // Android (http://b.android.com/58753) but it forces composition of API declarations which is
     // the recommended pattern.
-    if (service.getInterfaces().length > 0) {
+    
+    if (!allowExtendInerface && service.getInterfaces().length > 0) {
       throw new IllegalArgumentException("API interfaces must not extend other interfaces.");
     }
   }

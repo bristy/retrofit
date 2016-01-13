@@ -124,8 +124,8 @@ public final class Retrofit {
    * </pre>
    */
   @SuppressWarnings("unchecked") // Single-interface proxy creation guarded by parameter safety.
-  public <T> T create(final Class<T> service) {
-    Utils.validateServiceInterface(service);
+  public <T> T create(final Class<T> service, boolean allowExtendInerface) {
+    Utils.validateServiceInterface(service, allowExtendInerface);
     if (validateEagerly) {
       eagerlyValidateMethods(service);
     }
@@ -145,6 +145,11 @@ public final class Retrofit {
             return loadMethodHandler(method).invoke(args);
           }
         });
+  }
+  
+  @SuppressWarnings("unchecked") // Single-interface proxy creation guarded by parameter safety.
+  public <T> T create(final Class<T> service) {
+    return create(service, false);    
   }
 
   private void eagerlyValidateMethods(Class<?> service) {
